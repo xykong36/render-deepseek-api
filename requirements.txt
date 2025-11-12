@@ -1,1 +1,18 @@
 fastapi[all]
+pydantic-settings
+# Core dependencies for video transcript workflow
+youtube-transcript-api==1.2.2
+openai
+python-dotenv
+bson
+pymongo
+
+# Audio generation
+edge-tts
+
+# Cloud storage
+qcloud-cos-sdk-python  # Tencent Cloud COS
+boto3  # For R2 (S3-compatible)
+
+# Video/Audio download
+yt-dlp
