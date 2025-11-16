@@ -4,8 +4,8 @@ Pydantic models for request and response validation.
 Defines all data structures used in the Translation API endpoints.
 """
 
-from typing import Optional, Any
-from pydantic import BaseModel, Field
+from typing import Optional, Any, Union
+from pydantic import BaseModel, Field, field_validator
 
 
 # ===== Shared Models =====
@@ -43,7 +43,7 @@ class ParagraphGenerateSentencesRequest(BaseModel):
 
 class EnhancedSentence(BaseModel):
     """Model for an enhanced sentence with all metadata."""
-    sentence_id: Optional[str] = None
+    sentence_id: Optional[Union[str, int]] = None
     episode_id: Optional[int] = None
     episode_sequence: Optional[int] = None
     en: str
@@ -54,6 +54,14 @@ class EnhancedSentence(BaseModel):
     end_ts: Optional[float] = None
     duration: Optional[float] = None
     sentence_hash: Optional[str] = None
+
+    @field_validator('sentence_id')
+    @classmethod
+    def convert_sentence_id_to_str(cls, v):
+        """Convert sentence_id to string if it's an integer."""
+        if v is not None and isinstance(v, int):
+            return str(v)
+        return v
 
 
 class ParagraphGenerateSentencesResponse(BaseModel):
@@ -137,7 +145,7 @@ class Analysis(BaseModel):
 
 class MatchedSentence(BaseModel):
     """A sentence that matches an expression."""
-    sentence_id: Optional[str] = None
+    sentence_id: Optional[Union[str, int]] = None
     episode_id: Optional[int] = None
     episode_sequence: Optional[int] = None
     en: str
@@ -149,6 +157,14 @@ class MatchedSentence(BaseModel):
     sentence_hash: Optional[str] = None
     highlight_entries: list[HighlightEntry] = Field(default_factory=list)
     matched_highlight: Optional[str] = None
+
+    @field_validator('sentence_id')
+    @classmethod
+    def convert_sentence_id_to_str(cls, v):
+        """Convert sentence_id to string if it's an integer."""
+        if v is not None and isinstance(v, int):
+            return str(v)
+        return v
 
 
 class Expression(BaseModel):
@@ -182,7 +198,7 @@ class VideoTranscriptRequest(BaseModel):
     video_id: Optional[str] = Field(None, description="YouTube video ID (11 characters)")
     video_url: Optional[str] = Field(None, description="Full YouTube video URL")
 
-    def model_post_init(self, __context):
+    def model_post_init(self, __context) -> None:
         """Validate that at least one of video_id or video_url is provided."""
         if not self.video_id and not self.video_url:
             raise ValueError("Either video_id or video_url must be provided")

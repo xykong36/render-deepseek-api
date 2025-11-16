@@ -760,12 +760,12 @@ async def read_episode(
         sentences = [EnhancedSentence(**s) for s in episode_data.get("sentences", [])]
 
         return EpisodeReadResponse(
-            episode_id=episode_data["episode_id"],
+            episode_id=episode_data.get("episode_id", episode_id),  # Use URL param if missing
             sentences=sentences,
             metadata=episode_data.get("metadata", {}),
-            created_at=episode_data["created_at"],
-            updated_at=episode_data["updated_at"],
-            version=episode_data["version"]
+            created_at=episode_data.get("created_at", "1970-01-01T00:00:00"),
+            updated_at=episode_data.get("updated_at", "1970-01-01T00:00:00"),
+            version=episode_data.get("version", 1)
         )
 
     except EpisodeNotFoundError as e:
