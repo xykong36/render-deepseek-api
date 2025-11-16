@@ -197,6 +197,35 @@
 				"description": "Use Case 5: Fetch YouTube video transcript using full YouTube URL. Also supports short URLs like https://youtu.be/VIDEO_ID. Rate limited to 1 request per 5 seconds per IP."
 			},
 			"response": []
+		},
+		{
+			"name": "6. Generate Sentence Audio",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"sentences\": [\n    \"I was so exhausted because obviously I didn't sleep the night before because I was so nervous about the event.\",\n    \"The event went well and I'm actually really proud of myself, because I was saying to my friend yesterday, like I was kind of beating myself up before I went and was like, you know, you need to be bubbly, you need to be loud, you need to be really chatty, you need to make a really good impression, stuff like that.\",\n    \"And because I'm naturally shy and quiet, that doesn't come easily to me.\"\n  ],\n  \"voice\": \"en-US-AvaMultilingualNeural\",\n  \"max_workers\": 4\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/sentence/generate-audio",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"sentence",
+						"generate-audio"
+					]
+				},
+				"description": "Use Case 6: Generate MP3 audio files for sentences and upload to COS and R2 storage. Simply provide an array of sentence texts (strings). Audio files are generated using Edge TTS, named with MD5 hash of the sentence text, and uploaded to both COS (Tencent Cloud) and R2 (Cloudflare) storage. The simplified API only requires sentence text - no metadata like IDs, timestamps, or translations needed."
+			},
+			"response": []
 		}
 	],
 	"variable": [
