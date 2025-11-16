@@ -3,9 +3,8 @@ fastapi[all]
 youtube-transcript-api==1.2.2
 openai
 python-dotenv
-bson
 pymongo
-python-dotenv
+# Note: pymongo includes BSON support, no need for separate bson package
 # Audio generation
 edge-tts
 
